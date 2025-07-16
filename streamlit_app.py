@@ -1,3 +1,5 @@
+# Updated streamlit_app.py with "Channel" instead of "Merchant"
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -12,7 +14,7 @@ warnings.filterwarnings('ignore')
 
 # Page configuration
 st.set_page_config(
-    page_title="Payment Anomaly Detection!",
+    page_title="Payment Anomaly Detection",
     page_icon="🚨",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -83,7 +85,8 @@ def generate_sample_data():
     num_transactions = 500
     base_date = datetime(2024, 1, 1)
     
-    merchants = [f'MERCHANT_{i:03d}' for i in range(1, 11)]
+    # Updated: Changed from merchants to channels
+    channels = [f'CHANNEL_{i:03d}' for i in range(1, 11)]
     payment_methods = ['CARD', 'BANK_TRANSFER', 'DIGITAL_WALLET', 'DIRECT_DEBIT']
     currencies = ['GBP', 'USD', 'EUR']
     
@@ -97,7 +100,8 @@ def generate_sample_data():
             minutes=random.randint(0, 59)
         )
         
-        merchant_id = random.choice(merchants)
+        # Updated: Changed merchant_id to channel_id
+        channel_id = random.choice(channels)
         payment_method = random.choice(payment_methods)
         currency = random.choice(currencies)
         
@@ -131,7 +135,7 @@ def generate_sample_data():
             'timestamp': timestamp,
             'amount': round(amount, 2),
             'currency': currency,
-            'merchant_id': merchant_id,
+            'channel_id': channel_id,  # Updated: Changed from merchant_id
             'payment_method': payment_method,
             'settlement_date': settlement_date,
             'actual_settlement_date': actual_settlement_date,
@@ -304,9 +308,10 @@ def create_anomaly_dashboard(df):
         )
     
     with col2:
-        merchant_filter = st.selectbox(
-            "Filter by Merchant",
-            options=['ALL'] + list(df_anomalies['merchant_id'].unique())
+        # Updated: Changed from merchant to channel
+        channel_filter = st.selectbox(
+            "Filter by Channel",
+            options=['ALL'] + list(df_anomalies['channel_id'].unique())
         )
     
     with col3:
@@ -323,8 +328,9 @@ def create_anomaly_dashboard(df):
     if severity_filter != 'ALL':
         filtered_df = filtered_df[filtered_df['severity'] == severity_filter]
     
-    if merchant_filter != 'ALL':
-        filtered_df = filtered_df[filtered_df['merchant_id'] == merchant_filter]
+    # Updated: Changed from merchant to channel
+    if channel_filter != 'ALL':
+        filtered_df = filtered_df[filtered_df['channel_id'] == channel_filter]
     
     if len(date_range) == 2:
         filtered_df = filtered_df[
@@ -336,7 +342,7 @@ def create_anomaly_dashboard(df):
     if len(filtered_df) > 0:
         # Format the dataframe for display
         display_df = filtered_df[[
-            'transaction_id', 'timestamp', 'amount', 'merchant_id', 
+            'transaction_id', 'timestamp', 'amount', 'channel_id',  # Updated: Changed from merchant_id
             'payment_method', 'settlement_delay_days', 'reconciliation_status',
             'anomaly_score', 'severity'
         ]].copy()
@@ -371,12 +377,15 @@ def create_anomaly_dashboard(df):
         
         with col2:
             st.write("**Financial Impact:**")
-            total_amount = filtered_df['amount'].sum()
-            avg_amount = filtered_df['amount'].mean()
+            total_amount = filtered_df['amount'].str.replace('£', '').str.replace(',', '').astype(float).sum()
+            avg_amount = filtered_df['amount'].str.replace('£', '').str.replace(',', '').astype(float).mean()
+            max_amount = filtered_df['amount'].str.replace('£', '').str.replace(',', '').astype(float).max()
+            min_amount = filtered_df['amount'].str.replace('£', '').str.replace(',', '').astype(float).min()
+            
             st.write(f"- Total Amount: £{total_amount:,.2f}")
             st.write(f"- Average Amount: £{avg_amount:,.2f}")
-            st.write(f"- Max Amount: £{filtered_df['amount'].max():,.2f}")
-            st.write(f"- Min Amount: £{filtered_df['amount'].min():,.2f}")
+            st.write(f"- Max Amount: £{max_amount:,.2f}")
+            st.write(f"- Min Amount: £{min_amount:,.2f}")
     
     else:
         st.info("No anomalies found matching the selected criteria.")
@@ -409,7 +418,8 @@ def main():
         with col2:
             st.metric("Date Range", f"{df['timestamp'].min().date()} to {df['timestamp'].max().date()}")
         with col3:
-            st.metric("Unique Merchants", df['merchant_id'].nunique())
+            # Updated: Changed from merchant to channel
+            st.metric("Unique Channels", df['channel_id'].nunique())
         
         # Show raw data
         st.subheader("Raw Data Sample")
@@ -446,15 +456,22 @@ def main():
         - **Visualization**: Plotly, Seaborn
         - **Deployment**: Streamlit Cloud
         
-        ## Anomaly Types Detected
-        1. **Amount Anomalies**: Transactions with unusually high or low amounts
-        2. **Settlement Delays**: Transactions taking longer than expected to settle
-        3. **Reconciliation Issues**: Transactions that fail to match during reconciliation
-        4. **Timing Anomalies**: Transactions processed outside normal business hours
+        ## Anomaly Detection
+        The system identifies:
+        - **Amount Anomalies**: Transactions with unusually high or low amounts
+        - **Settlement Delays**: Transactions taking longer than expected to settle
+        - **Reconciliation Issues**: Transactions that fail to match during reconciliation
+        - **Timing Anomalies**: Transactions processed outside normal business hours
+        
+        ## Data Structure
+        The system processes payment data with the following key fields:
+        - **Channel Analysis**: Payment channel performance and anomaly patterns
+        - **Transaction Monitoring**: Real-time transaction pattern analysis
+        - **Settlement Tracking**: Settlement delay and reconciliation monitoring
         
         ## Sample Data
         The application uses synthetic DART 312/313 compliant data that simulates real payment 
-        settlement and reconciliation scenarios.
+        settlement and reconciliation scenarios with channel-based analysis.
         
         ---
         
