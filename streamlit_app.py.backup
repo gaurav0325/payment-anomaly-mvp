@@ -1,0 +1,368 @@
+﻿"""
+British Airways Payment Anomaly Detection Dashboard
+Enhanced DART 312/313 Processing with Real-time Anomaly Detection
+"""
+
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import yaml
+from datetime import datetime, timedelta
+import sys
+import os
+
+# Add src to path for imports
+sys.path.append('src')
+
+from core.dart_parser import DARTParser
+from core.anomaly_detector import EnhancedAnomalyDetector
+
+# Page configuration
+st.set_page_config(
+    page_title="BA Payment Anomaly Detection",
+    page_icon="🛫",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Custom CSS for BA branding
+st.markdown(""\"
+<style>
+    .main-header {
+        font-size: 2.5rem;
+        color: #1f4788;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .metric-card {
+        background-color: #f0f2f6;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border-left: 4px solid #1f4788;
+    }
+    .severity-high {
+        background-color: #ffebee;
+        border-left-color: #f44336;
+    }
+    .severity-medium {
+        background-color: #fff3e0;
+        border-left-color: #ff9800;
+    }
+    .severity-low {
+        background-color: #e8f5e8;
+        border-left-color: #4caf50;
+    }
+</style>
+""\", unsafe_allow_html=True)
+
+@st.cache_data
+def load_sample_data():
+    ""\"Load sample DART data for demonstration""\"
+    # Sample DART 312 data
+    dart_312_data = {
+        'record_type': ['00', '01', '01', '01', '02', '03', '99'],
+        'party_id': ['BA001'] * 7,
+        'merchant_id': ['', 'BA884', 'BA480', 'BA287', 'BA345', 'BA789', ''],
+        'transaction_amount': [0, 834.48, 75000.00, 425.75, 89.75, 45.67, 0],
+        'transaction_currency': ['', 'USD', 'GBP', 'GBP', 'GBP', 'GBP', ''],
+        'settlement_amount': [0, 675.93, 75000.00, 425.75, 0, 0, 0],
+        'mcc': ['', '4511', '4511', '4511', '4511', '0000', ''],
+        'airline_ticket_number': ['', 'BA10386731', 'BA8095509', 'BA2341567', 'BA4567890', 'BA6789012', '']
+    }
+    
+    # Sample DART 313 data
+    dart_313_data = {
+        'record_type': ['00', '01', '05', '08', '15', '16', '16', '99'],
+        'party_id': ['BA001'] * 8,
+        'amount': [0, 154275.95, 0, 0, 0, 0, 0, 0],
+        'value_of_transactions': [0, 0, 156750.25, -2248.80, 0, 0, 0, 0],
+        'chargeback_value': [0, 0, 0, 0, 0, 1250.00, 850.00, 0],
+        'currency': ['GBP'] * 6 + ['USD', 'GBP'],
+        'number_of_transactions': [0, 0, 1235, 1235, 0, 0, 0, 0],
+        'dispute_id': [''] * 5 + ['DP789456', 'DP234567', '']
+    }
+    
+    return pd.DataFrame(dart_312_data), pd.DataFrame(dart_313_data)
+
+def main():
+    # Header
+    st.markdown('<h1 class=\"main-header\">🛫 British Airways Payment Anomaly Detection</h1>', unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.info(\"**Developer:** Gaurav (AI Solution Architect)\")
+    with col2:
+        st.info(\"**Company:** BranchSpace\")
+    with col3:
+        st.info(\"**Client:** British Airways\")
+    
+    # Sidebar
+    st.sidebar.title(\"DART File Processing\")
+    
+    # File upload option
+    processing_mode = st.sidebar.selectbox(
+        \"Processing Mode\",
+        [\"Demo Mode (Sample Data)\", \"Upload DART Files\", \"Live Processing\"]
+    )
+    
+    if processing_mode == \"Demo Mode (Sample Data)\":
+        dart_312_df, dart_313_df = load_sample_data()
+        
+        # Initialize processors
+        parser = DARTParser()
+        detector = EnhancedAnomalyDetector()
+        
+        # Process anomalies
+        dart_312_anomalies = detector.detect_dart_312_anomalies(dart_312_df)
+        dart_313_anomalies = detector.detect_dart_313_anomalies(dart_313_df)
+        
+        # Dashboard content
+        display_dashboard(dart_312_df, dart_313_df, dart_312_anomalies, dart_313_anomalies)
+        
+    elif processing_mode == \"Upload DART Files\":
+        st.sidebar.markdown(\"### Upload DART Files\")
+        
+        dart_312_file = st.sidebar.file_uploader(\"Upload DART 312 File\", type=['csv'])
+        dart_313_file = st.sidebar.file_uploader(\"Upload DART 313 File\", type=['csv'])
+        
+        if dart_312_file and dart_313_file:
+            # Process uploaded files
+            process_uploaded_files(dart_312_file, dart_313_file)
+        else:
+            st.info(\"Please upload both DART 312 and DART 313 files to proceed.\")
+    
+    else:  # Live Processing
+        st.sidebar.markdown(\"### Live DART Processing\")
+        st.sidebar.info(\"Connect to Worldpay SFTP for live processing\")
+        
+        # Configuration for live processing
+        sftp_config = st.sidebar.expander(\"SFTP Configuration\")
+        with sftp_config:
+            st.text_input(\"SFTP Host\", value=\"secure.worldpay.com\")
+            st.text_input(\"Username\")
+            st.text_input(\"Password\", type=\"password\")
+            st.button(\"Test Connection\")
+        
+        st.info(\"Live processing mode - Connect to Worldpay SFTP to process real-time DART files\")
+
+def display_dashboard(dart_312_df, dart_313_df, dart_312_anomalies, dart_313_anomalies):
+    ""\"Display the main dashboard with anomaly analysis""\"
+    
+    # Summary metrics
+    st.markdown(\"## 📊 Real-time Anomaly Summary\")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    total_anomalies = len(dart_312_anomalies) + len(dart_313_anomalies)
+    high_severity = len([a for a in dart_312_anomalies + dart_313_anomalies if a.get('severity') == 'HIGH'])
+    
+    with col1:
+        st.metric(\"Total Anomalies\", total_anomalies, delta=f\"+{total_anomalies} new\")
+    with col2:
+        st.metric(\"DART 312 Issues\", len(dart_312_anomalies))
+    with col3:
+        st.metric(\"DART 313 Issues\", len(dart_313_anomalies))
+    with col4:
+        st.metric(\"Critical Alerts\", high_severity, delta=f\"+{high_severity}\")
+    
+    # Anomaly breakdown
+    if total_anomalies > 0:
+        st.markdown(\"## 🚨 Anomaly Analysis\")
+        
+        # Severity distribution
+        severities = [a.get('severity', 'UNKNOWN') for a in dart_312_anomalies + dart_313_anomalies]
+        severity_counts = pd.Series(severities).value_counts()
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            fig_severity = px.pie(
+                values=severity_counts.values, 
+                names=severity_counts.index,
+                title=\"Anomalies by Severity\",
+                color_discrete_map={'HIGH': '#f44336', 'MEDIUM': '#ff9800', 'LOW': '#4caf50'}
+            )
+            st.plotly_chart(fig_severity, use_container_width=True)
+        
+        with col2:
+            # Anomaly types
+            types = [a.get('type', 'UNKNOWN') for a in dart_312_anomalies + dart_313_anomalies]
+            type_counts = pd.Series(types).value_counts()
+            
+            fig_types = px.bar(
+                x=type_counts.index, 
+                y=type_counts.values,
+                title=\"Anomalies by Type\",
+                labels={'x': 'Anomaly Type', 'y': 'Count'}
+            )
+            st.plotly_chart(fig_types, use_container_width=True)
+    
+    # Detailed anomaly list
+    st.markdown(\"## 📋 Detailed Anomaly Report\")
+    
+    # Filter options
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        severity_filter = st.selectbox(\"Filter by Severity\", [\"All\", \"HIGH\", \"MEDIUM\", \"LOW\"])
+    with col2:
+        dart_filter = st.selectbox(\"Filter by DART Type\", [\"All\", \"DART 312\", \"DART 313\"])
+    with col3:
+        show_details = st.checkbox(\"Show Technical Details\", value=False)
+    
+    # Display filtered anomalies
+    all_anomalies = dart_312_anomalies + dart_313_anomalies
+    
+    filtered_anomalies = all_anomalies
+    if severity_filter != \"All\":
+        filtered_anomalies = [a for a in filtered_anomalies if a.get('severity') == severity_filter]
+    
+    if dart_filter == \"DART 312\":
+        filtered_anomalies = dart_312_anomalies
+    elif dart_filter == \"DART 313\":
+        filtered_anomalies = dart_313_anomalies
+    
+    for i, anomaly in enumerate(filtered_anomalies):
+        severity = anomaly.get('severity', 'UNKNOWN')
+        severity_class = f\"severity-{severity.lower()}\"
+        
+        with st.container():
+            st.markdown(f\"\"\"
+            <div class=\"metric-card {severity_class}\">
+                <h4>{anomaly.get('type', 'Unknown').replace('_', ' ').title()}</h4>
+                <p><strong>Severity:</strong> {severity}</p>
+                <p><strong>Description:</strong> {anomaly.get('description', 'No description')}</p>
+                {f\"<p><strong>Amount:</strong> {anomaly.get('currency', 'GBP')} {anomaly.get('amount', 0):,.2f}</p>\" if anomaly.get('amount') else \"\"}
+                {f\"<p><strong>Merchant ID:</strong> {anomaly.get('merchant_id', 'N/A')}</p>\" if anomaly.get('merchant_id') else \"\"}
+                {f\"<p><strong>Airline Ticket:</strong> {anomaly.get('airline_ticket', 'N/A')}</p>\" if anomaly.get('airline_ticket') else \"\"}
+            </div>
+            \"\"\", unsafe_allow_html=True)
+            
+            if show_details:
+                st.json(anomaly)
+    
+    if not filtered_anomalies:
+        st.success(\"No anomalies found matching the selected filters! ✅\")
+    
+    # Transaction analysis
+    st.markdown(\"## 💳 Transaction Analysis\")
+    
+    # DART 312 transaction analysis
+    transaction_records = dart_312_df[dart_312_df['record_type'].isin(['01', '02', '03'])]
+    
+    if not transaction_records.empty:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Transaction amounts distribution
+            amounts = transaction_records['transaction_amount'].dropna()
+            if len(amounts) > 0:
+                fig_amounts = px.histogram(
+                    x=amounts, 
+                    title=\"Transaction Amount Distribution\",
+                    labels={'x': 'Transaction Amount (GBP)', 'y': 'Count'},
+                    nbins=20
+                )
+                st.plotly_chart(fig_amounts, use_container_width=True)
+        
+        with col2:
+            # Currency distribution
+            if 'transaction_currency' in transaction_records.columns:
+                currency_dist = transaction_records['transaction_currency'].value_counts()
+                fig_currency = px.pie(
+                    values=currency_dist.values,
+                    names=currency_dist.index,
+                    title=\"Transaction Currency Distribution\"
+                )
+                st.plotly_chart(fig_currency, use_container_width=True)
+    
+    # DART 313 funding analysis
+    st.markdown(\"## 💰 Funding & Settlement Analysis\")
+    
+    funding_data = dart_313_df[dart_313_df['record_type'] == '05']
+    settlement_data = dart_313_df[dart_313_df['record_type'] == '03']
+    
+    if not funding_data.empty and not settlement_data.empty:
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            total_funding = funding_data['value_of_transactions'].sum()
+            st.metric(\"Total Funding\", f\"£{total_funding:,.2f}\")
+        
+        with col2:
+            total_settlement = settlement_data['amount'].sum()
+            st.metric(\"Total Settlement\", f\"£{total_settlement:,.2f}\")
+        
+        with col3:
+            difference = abs(total_funding - total_settlement)
+            st.metric(\"Difference\", f\"£{difference:,.2f}\", 
+                     delta=f\"{'⚠️ Mismatch' if difference > 100 else '✅ Balanced'}\")
+    
+    # Export functionality
+    st.markdown(\"## 📊 Export & Reporting\")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button(\"📋 Generate Anomaly Report\"):
+            report_data = []
+            for anomaly in all_anomalies:
+                report_data.append({
+                    'Type': anomaly.get('type', ''),
+                    'Severity': anomaly.get('severity', ''),
+                    'Description': anomaly.get('description', ''),
+                    'Amount': anomaly.get('amount', ''),
+                    'Currency': anomaly.get('currency', ''),
+                    'Merchant ID': anomaly.get('merchant_id', ''),
+                    'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                })
+            
+            if report_data:
+                report_df = pd.DataFrame(report_data)
+                csv = report_df.to_csv(index=False)
+                st.download_button(
+                    label=\"Download Anomaly Report (CSV)\",
+                    data=csv,
+                    file_name=f\"ba_anomaly_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv\",
+                    mime=\"text/csv\"
+                )
+    
+    with col2:
+        if st.button(\"📧 Send Alert Summary\"):
+            st.success(\"Alert summary sent to BA Finance Team!\")
+            st.info(\"Integration with BA's notification system would go here\")
+    
+    with col3:
+        if st.button(\"🔄 Refresh Data\"):
+            st.experimental_rerun()
+
+def process_uploaded_files(dart_312_file, dart_313_file):
+    ""\"Process uploaded DART files""\"
+    try:
+        # Initialize processors
+        parser = DARTParser()
+        detector = EnhancedAnomalyDetector()
+        
+        # Parse files
+        dart_312_df, dart_312_errors = parser.parse_dart_312(dart_312_file)
+        dart_313_df, dart_313_errors = parser.parse_dart_313(dart_313_file)
+        
+        # Show parsing errors if any
+        if dart_312_errors:
+            st.error(f\"DART 312 Parsing Errors: {dart_312_errors}\")
+        if dart_313_errors:
+            st.error(f\"DART 313 Parsing Errors: {dart_313_errors}\")
+        
+        # Detect anomalies
+        dart_312_anomalies = detector.detect_dart_312_anomalies(dart_312_df)
+        dart_313_anomalies = detector.detect_dart_313_anomalies(dart_313_df)
+        
+        # Display results
+        display_dashboard(dart_312_df, dart_313_df, dart_312_anomalies, dart_313_anomalies)
+        
+    except Exception as e:
+        st.error(f\"Error processing files: {str(e)}\")
+
+if __name__ == \"__main__\":
+    main()

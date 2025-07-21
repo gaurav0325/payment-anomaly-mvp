@@ -1,0 +1,7 @@
+﻿record_type,party_name,settlement_currency,party_id,processing_date,todays_position,currency,amount,balance_carried_forward,payment_instruction_id,due_date,settlement_amount,acquired_cards_subtotal,funding_bill_id,number_of_transactions,value_of_transactions,chargeback_value,dispute_id,pricing_segment_name,pricing_segment_code,masked_pan,arn,airline_ticket,payee_reference_otr
+00,British Airways PLC,GBP,BA001,20250719,,,,,,,,,,,,,,,,,,,
+01,,,BA001,20250719,Final funding position after all deductions,GBP,154275.95,,,,,,,,,,,,,,,,,
+05,,,BA001,20250719,,,,,,,,,Funding of FIS acquired transactions submitted,FB240719001,1235,156750.25,,,,,,,,
+16,,,BA001,20250719,,,,,,,,,,,,,1250.00,DP789456,Visa Credit Personal,BC000,****-****-****-4521,ARN4521789654123456,BA8521479,OTR123456
+16,,,BA001,20250719,,,,,,,,,,,,,850.00,DP234567,American Express,AX000,****-****-****-8765,ARN8765432198765432,BA7654321,OTR654321
+99,,,BA001,20250719,,,,,,,,,,,,,,,,,,,16

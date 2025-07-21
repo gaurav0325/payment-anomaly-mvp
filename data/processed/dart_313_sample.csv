@@ -1,0 +1,203 @@
+processing_date,party_name,record_type,is_anomaly,record_count,anomaly_type,anomaly_reason,party_id,currency,settlement_currency,amount
+20250720,Airlines PLC,00,,,,,AL001,,GBP,
+20250517,,01,False,,,,AL001,USD,,94.74
+20250524,,01,False,,,,AL001,EUR,,136.32
+20250705,,01,False,,,,AL001,GBP,,130.51
+20250719,,01,False,,,,AL001,USD,,115.44
+20250523,,01,False,,,,AL001,USD,,182.15
+20250720,,01,False,,,,AL001,USD,,123.55
+20250512,,01,False,,,,AL001,EUR,,140.29
+20250609,,01,False,,,,AL001,EUR,,175.44
+20250530,,01,False,,,,AL001,EUR,,121.96
+20250608,,01,False,,,,AL001,USD,,156.29
+20250709,,01,False,,,,AL001,USD,,173.85
+20250530,,01,False,,,,AL001,GBP,,44.33
+20250603,,01,False,,,,AL001,USD,,95.56
+20250525,,01,False,,,,AL001,GBP,,189.04
+20250616,,01,False,,,,AL001,EUR,,223.9
+20250517,,01,False,,,,AL001,GBP,,151.43
+20250521,,01,False,,,,AL001,EUR,,148.0
+20250706,,01,False,,,,AL001,EUR,,252.82
+20250429,,01,False,,,,AL001,GBP,,144.95
+20250616,,01,False,,,,AL001,EUR,,103.56
+20250710,,01,False,,,,AL001,EUR,,209.61
+20250517,,01,False,,,,AL001,USD,,209.3
+20250702,,01,False,,,,AL001,GBP,,185.51
+20250526,,01,False,,,,AL001,GBP,,118.01
+20250421,,01,False,,,,AL001,GBP,,168.04
+20250708,,01,False,,,,AL001,EUR,,100.97
+20250611,,01,False,,,,AL001,USD,,165.61
+20250711,,01,False,,,,AL001,USD,,158.41
+20250421,,01,False,,,,AL001,USD,,94.69
+20250624,,01,True,,funding_anomaly,Unexpected negative or positive swing in funding detected.,AL001,EUR,,165.7
+20250626,,01,False,,,,AL001,EUR,,137.61
+20250509,,01,False,,,,AL001,GBP,,132.23
+20250505,,01,False,,,,AL001,USD,,216.23
+20250519,,01,False,,,,AL001,EUR,,122.91
+20250520,,01,False,,,,AL001,USD,,122.91
+20250611,,01,False,,,,AL001,EUR,,166.0
+20250502,,01,False,,,,AL001,USD,,166.49
+20250624,,01,False,,,,AL001,EUR,,166.42
+20250714,,01,False,,,,AL001,EUR,,218.35
+20250630,,01,False,,,,AL001,GBP,,222.32
+20250505,,01,False,,,,AL001,USD,,15.09
+20250708,,01,False,,,,AL001,GBP,,94.26
+20250501,,01,False,,,,AL001,EUR,,179.89
+20250611,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,EUR,,228.95
+20250603,,01,False,,,,AL001,USD,,145.56
+20250714,,01,False,,,,AL001,EUR,,173.69
+20250604,,01,False,,,,AL001,GBP,,181.74
+20250625,,01,False,,,,AL001,EUR,,99.28
+20250531,,01,False,,,,AL001,GBP,,219.95
+20250604,,01,False,,,,AL001,USD,,221.52
+20250601,,01,True,,settlement_mismatch,Settlement amount does not match corresponding 312 record.,AL001,GBP,,201.76
+20250624,,01,False,,,,AL001,EUR,,60.39
+20250614,,01,False,,,,AL001,USD,,78.51
+20250716,,01,False,,,,AL001,EUR,,-2.84
+20250629,,01,False,,,,AL001,GBP,,129.04
+20250617,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,GBP,,248.26
+20250519,,01,True,,funding_anomaly,Unexpected negative or positive swing in funding detected.,AL001,USD,,202.41
+20250514,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,EUR,,122.74
+20250625,,01,False,,,,AL001,EUR,,101.91
+20250710,,01,False,,,,AL001,EUR,,129.56
+20250615,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,GBP,,160.32
+20250709,,01,False,,,,AL001,USD,,147.28
+20250530,,01,False,,,,AL001,EUR,,99.94
+20250717,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,EUR,,155.48
+20250717,,01,False,,,,AL001,EUR,,84.37
+20250720,,01,False,,,,AL001,EUR,,215.45
+20250701,,01,True,,missing_confirmation,Expected settlement confirmation missing for a 312 record.,AL001,EUR,,184.8
+20250709,,01,False,,,,AL001,GBP,,123.79
+20250504,,01,False,,,,AL001,EUR,,103.4
+20250630,,01,True,,settlement_mismatch,Settlement amount does not match corresponding 312 record.,AL001,USD,,233.6
+20250430,,01,False,,,,AL001,USD,,143.93
+20250711,,01,False,,,,AL001,GBP,,166.82
+20250704,,01,False,,,,AL001,GBP,,95.77
+20250514,,01,False,,,,AL001,GBP,,175.79
+20250528,,01,False,,,,AL001,USD,,93.81
+20250711,,01,False,,,,AL001,USD,,197.23
+20250712,,01,False,,,,AL001,USD,,37.97
+20250605,,01,False,,,,AL001,EUR,,117.57
+20250604,,01,False,,,,AL001,USD,,143.44
+20250604,,01,False,,,,AL001,GBP,,160.71
+20250423,,01,False,,,,AL001,GBP,,90.79
+20250430,,01,True,,missing_confirmation,Expected settlement confirmation missing for a 312 record.,AL001,EUR,,150.97
+20250518,,01,False,,,,AL001,EUR,,147.65
+20250704,,01,False,,,,AL001,USD,,136.56
+20250520,,01,False,,,,AL001,USD,,156.02
+20250504,,01,False,,,,AL001,EUR,,181.9
+20250517,,01,False,,,,AL001,EUR,,100.0
+20250620,,01,False,,,,AL001,GBP,,131.39
+20250429,,01,False,,,,AL001,EUR,,141.73
+20250422,,01,False,,,,AL001,USD,,173.22
+20250511,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,EUR,,67.35
+20250514,,01,False,,,,AL001,GBP,,309.4
+20250715,,01,False,,,,AL001,EUR,,197.74
+20250622,,01,False,,,,AL001,GBP,,180.23
+20250622,,01,False,,,,AL001,GBP,,141.6
+20250716,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,GBP,,183.68
+20250713,,01,False,,,,AL001,EUR,,165.06
+20250615,,01,False,,,,AL001,GBP,,57.95
+20250701,,01,False,,,,AL001,GBP,,160.27
+20250503,,01,True,,settlement_mismatch,Settlement amount does not match corresponding 312 record.,AL001,USD,,180.52
+20250709,,01,False,,,,AL001,USD,,127.66
+20250608,,01,False,,,,AL001,GBP,,210.51
+20250709,,01,False,,,,AL001,USD,,159.08
+20250703,,01,False,,,,AL001,GBP,,239.51
+20250622,,01,False,,,,AL001,EUR,,128.16
+20250610,,01,False,,,,AL001,GBP,,216.9
+20250707,,01,False,,,,AL001,GBP,,71.28
+20250610,,01,False,,,,AL001,USD,,132.73
+20250422,,01,False,,,,AL001,EUR,,66.23
+20250504,,01,False,,,,AL001,GBP,,186.24
+20250621,,01,False,,,,AL001,EUR,,106.75
+20250714,,01,False,,,,AL001,EUR,,101.13
+20250707,,01,False,,,,AL001,GBP,,186.21
+20250613,,01,False,,,,AL001,USD,,149.26
+20250616,,01,False,,,,AL001,EUR,,124.5
+20250527,,01,False,,,,AL001,GBP,,127.79
+20250511,,01,True,,settlement_mismatch,Settlement amount does not match corresponding 312 record.,AL001,EUR,,105.8
+20250630,,01,False,,,,AL001,USD,,156.33
+20250509,,01,False,,,,AL001,GBP,,210.09
+20250521,,01,False,,,,AL001,USD,,195.32
+20250529,,01,False,,,,AL001,USD,,186.06
+20250511,,01,True,,funding_anomaly,Unexpected negative or positive swing in funding detected.,AL001,USD,,129.25
+20250711,,01,False,,,,AL001,USD,,142.32
+20250508,,01,False,,,,AL001,USD,,216.91
+20250422,,01,True,,settlement_mismatch,Settlement amount does not match corresponding 312 record.,AL001,USD,,140.1
+20250710,,01,False,,,,AL001,EUR,,105.19
+20250520,,01,False,,,,AL001,EUR,,100.75
+20250506,,01,False,,,,AL001,USD,,123.7
+20250614,,01,False,,,,AL001,GBP,,172.88
+20250424,,01,False,,,,AL001,USD,,51.99
+20250709,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,GBP,,112.46
+20250606,,01,True,,chargeback_anomaly,Unusual chargeback value or frequency detected.,AL001,USD,,55.73
+20250513,,01,False,,,,AL001,EUR,,228.02
+20250430,,01,False,,,,AL001,USD,,147.15
+20250514,,01,True,,settlement_mismatch,Settlement amount does not match corresponding 312 record.,AL001,USD,,165.64
+20250601,,01,False,,,,AL001,USD,,192.61
+20250519,,01,False,,,,AL001,GBP,,192.53
+20250426,,01,False,,,,AL001,USD,,170.44
+20250706,,01,False,,,,AL001,EUR,,9.08
+20250527,,01,False,,,,AL001,EUR,,162.05
+20250430,,01,False,,,,AL001,GBP,,124.27
+20250519,,01,False,,,,AL001,GBP,,136.03
+20250424,,01,False,,,,AL001,EUR,,161.49
+20250614,,01,False,,,,AL001,EUR,,127.04
+20250514,,01,False,,,,AL001,USD,,166.57
+20250625,,01,False,,,,AL001,GBP,,159.71
+20250507,,01,False,,,,AL001,EUR,,146.8
+20250502,,01,False,,,,AL001,EUR,,116.0
+20250609,,01,False,,,,AL001,EUR,,92.43
+20250530,,01,True,,settlement_mismatch,Settlement amount does not match corresponding 312 record.,AL001,GBP,,105.22
+20250606,,01,False,,,,AL001,EUR,,117.14
+20250707,,01,False,,,,AL001,GBP,,186.01
+20250619,,01,False,,,,AL001,EUR,,131.27
+20250629,,01,False,,,,AL001,USD,,85.49
+20250531,,01,False,,,,AL001,USD,,114.86
+20250708,,01,False,,,,AL001,EUR,,202.91
+20250619,,01,False,,,,AL001,USD,,60.97
+20250501,,01,False,,,,AL001,GBP,,163.4
+20250719,,01,True,,funding_anomaly,Unexpected negative or positive swing in funding detected.,AL001,EUR,,145.53
+20250516,,01,False,,,,AL001,EUR,,155.88
+20250617,,01,False,,,,AL001,USD,,156.99
+20250503,,01,False,,,,AL001,GBP,,145.89
+20250504,,01,False,,,,AL001,GBP,,196.61
+20250525,,01,False,,,,AL001,EUR,,207.02
+20250605,,01,False,,,,AL001,GBP,,67.28
+20250423,,01,False,,,,AL001,GBP,,111.88
+20250515,,01,False,,,,AL001,EUR,,89.42
+20250519,,01,False,,,,AL001,EUR,,106.98
+20250516,,01,False,,,,AL001,USD,,137.87
+20250603,,01,False,,,,AL001,USD,,160.18
+20250513,,01,False,,,,AL001,EUR,,216.91
+20250522,,01,False,,,,AL001,GBP,,69.91
+20250616,,01,False,,,,AL001,USD,,119.08
+20250424,,01,False,,,,AL001,USD,,222.37
+20250713,,01,False,,,,AL001,EUR,,225.2
+20250428,,01,False,,,,AL001,EUR,,220.81
+20250619,,01,False,,,,AL001,EUR,,255.11
+20250620,,01,False,,,,AL001,GBP,,100.34
+20250706,,01,True,,funding_anomaly,Unexpected negative or positive swing in funding detected.,AL001,GBP,,160.84
+20250615,,01,False,,,,AL001,GBP,,101.85
+20250504,,01,False,,,,AL001,USD,,99.34
+20250606,,01,False,,,,AL001,USD,,127.1
+20250709,,01,False,,,,AL001,USD,,122.87
+20250504,,01,False,,,,AL001,EUR,,137.99
+20250528,,01,False,,,,AL001,USD,,145.12
+20250708,,01,False,,,,AL001,USD,,168.8
+20250607,,01,False,,,,AL001,EUR,,143.69
+20250426,,01,False,,,,AL001,USD,,155.76
+20250713,,01,False,,,,AL001,EUR,,91.42
+20250531,,01,False,,,,AL001,USD,,178.13
+20250502,,01,False,,,,AL001,EUR,,165.01
+20250512,,01,False,,,,AL001,EUR,,67.75
+20250526,,01,False,,,,AL001,EUR,,147.98
+20250430,,01,False,,,,AL001,GBP,,93.28
+20250503,,01,False,,,,AL001,EUR,,116.03
+20250531,,01,False,,,,AL001,GBP,,193.87
+20250709,,01,True,,funding_anomaly,Unexpected negative or positive swing in funding detected.,AL001,GBP,,95.28
+20250602,,01,False,,,,AL001,EUR,,159.83
+20250709,,01,False,,,,AL001,USD,,63.35
+20250711,,01,False,,,,AL001,GBP,,165.74
+,,99,,201,,,,,,
